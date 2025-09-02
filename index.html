@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚖️ Honorarios - Alimentos (Art. 39 Ley 14.967)</title>
+  <meta name="theme-color" content="#1e88e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#bbdefb,#e3f2fd);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      width: 95%;
+      max-width: 420px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+    h1 {
+      color: #0d47a1;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #424242;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      color: #1a237e;
+      text-align: left;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #90caf9;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #1e88e5;
+      outline: none;
+      box-shadow: 0 0 6px rgba(30,136,229,0.6);
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg,#42a5f5,#1e88e5);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    button:active {
+      transform: scale(0.99);
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #e8f5e9;
+      font-size: 15px;
+      text-align: left;
+      border-left: 6px solid #2e7d32;
+      line-height: 1.5;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #0d47a1;
+      font-weight: bold;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚖️ Juicios de Alimentos</h1>
+    <div class="subtitle">Honorarios - 1ª Instancia (Art. 39, Ley 14.967)</div>
+    
+    <label for="jus">Valor actual del Jus (en $)</label>
+    <input type="text" id="jus" inputmode="decimal" pattern="[0-9.,]*" placeholder="Ej: 25.000 o 25000">
+
+    <label for="cuota">Cuota mensual fijada (en $)</label>
+    <input type="text" id="cuota" inputmode="decimal" pattern="[0-9.,]*" placeholder="Ej: 50.000 o 50000">
+
+    <button id="btnCalcular">Calcular Honorarios</button>
+
+    <div class="result" id="resultado"></div>
+
+    <div class="footer">
+      Juzgado de Familia N.º 6 - Avellaneda Lanús
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      function normalizarNumero(str) {
+        if (str == null) return NaN;
+        str = String(str).trim();
+        if (!str) return NaN;
+        str = str.replace(/\./g, '').replace(/,/g, '.');
+        return parseFloat(str);
+      }
+
+      function calcular() {
+        var jus = normalizarNumero(document.getElementById('jus').value);
+        var cuota = normalizarNumero(document.getElementById('cuota').value);
+        var resultado = document.getElementById('resultado');
+
+        if (!isFinite(jus) || !isFinite(cuota)) {
+          resultado.innerHTML = "<b style='color:red;'>Ingresá el valor del Jus y la cuota mensual (solo números).</b>";
+          return;
+        }
+
+        var base = cuota * 24;
+        var minPesos = base * 0.10;
+        var maxPesos = base * 0.25;
+        var minJus = minPesos / jus;
+        var maxJus = maxPesos / jus;
+
+        var fmt = (n) => n.toLocaleString('es-AR', { maximumFractionDigits: 2 });
+
+        resultado.innerHTML = ""
+          + "<b>📌 Base regulatoria:</b><br>"
+          + "Cuota × 24 = $" + fmt(base) + "<br><br>"
+          + "<b>⚖️ Honorarios 1ª instancia:</b><br>"
+          + "▸ 10% = " + fmt(minJus) + " Jus<br>"
+          + "▸ 25% = " + fmt(maxJus) + " Jus<br><br>"
+          + "<i>Referencia legal: Art. 39, Ley 14.967</i>";
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('btnCalcular');
+        btn.addEventListener('click', function(e) { e.preventDefault(); calcular(); });
+        btn.addEventListener('touchstart', function(e) { e.preventDefault(); calcular(); }, { passive: false });
+      });
+    })();
+  </script>
+</body>
+</html>

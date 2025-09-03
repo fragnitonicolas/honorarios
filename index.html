@@ -153,8 +153,22 @@
 
         var fmt = (n) => n.toLocaleString('es-AR', { maximumFractionDigits: 2 });
 
-        <a href="https://www.scba.gov.ar/paginas.asp?id=41320" target="_blank">
-  <button type="button" style="background:#1976d2; margin-top:10px;">
-    📎 Consulta el valor del Jus
-  </button>
-</a>
+        resultado.innerHTML = ""
+          + "<b>📌 Base regulatoria:</b><br>"
+          + "Cuota × 24 = $" + fmt(base) + "<br><br>"
+          + "<b>⚖️ Honorarios 1ª instancia:</b><br>"
+          + "▸ 10% = " + fmt(minJus) + " Jus<br>"
+          + "▸ 25% = " + fmt(maxJus) + " Jus<br><br>"
+          + "<i>Referencia legal: Art. 39, Ley 14.967</i>";
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('btnCalcular');
+        btn.addEventListener('click', function(e) { e.preventDefault(); calcular(); });
+        btn.addEventListener('touchstart', function(e) { e.preventDefault(); calcular(); }, { passive: false });
+      });
+    })();
+  </script>
+</body>
+</html>
+
